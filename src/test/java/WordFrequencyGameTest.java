@@ -8,7 +8,13 @@ import static org.hamcrest.core.Is.is;
  */
 public class WordFrequencyGameTest {
 
-
+    private void validate_Input_words_process_to_expected_word(String inputStr, String expectResult) {
+        WordFrequencyGame game = new WordFrequencyGame();
+        //When
+        String result = game.getResult(inputStr);
+        //Then
+        assertThat(result, is(expectResult));
+    }
 
     @Test
     public void should_get_the_1_when_input_the() throws Exception {
@@ -58,11 +64,4 @@ public class WordFrequencyGameTest {
         validate_Input_words_process_to_expected_word(inputStr, expectResult);
     }
 
-    private void validate_Input_words_process_to_expected_word(String inputStr, String expectResult) {
-        WordFrequencyGame game = new WordFrequencyGame();
-        //When
-        String result = game.getResult(inputStr);
-        //Then
-        assertThat(result, is(expectResult));
-    }
 }

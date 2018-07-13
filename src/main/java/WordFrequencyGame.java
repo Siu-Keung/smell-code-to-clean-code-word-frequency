@@ -11,30 +11,21 @@ public class WordFrequencyGame {
         } else {
 
             try {
-
-                //split the input string with 1 to n pieces of spaces
-                String[] arr = inputStr.split("\\s+");
-
-                List<Input> inputList = new ArrayList<>();
-                for (String s : arr) {
-                    Input input = new Input(s, 1);
-                    inputList.add(input);
-                }
+                List<String> inputList = getWords(inputStr);
 
                 //get the map for the next step of sizing the same word
-                Map<String, List<Input>> map = getListMap(inputList);
+                Map<String, List<String>> map = getListMap(inputList);
 
                 List<Input> list = new ArrayList<>();
-                for (Map.Entry<String, List<Input>> entry : map.entrySet()) {
+                for (Map.Entry<String, List<String>> entry : map.entrySet()) {
                     Input input = new Input(entry.getKey(), entry.getValue().size());
                     list.add(input);
                 }
-                inputList = list;
 
-                inputList.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
+                list.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
 
                 StringJoiner joiner = new StringJoiner("\n");
-                for (Input w : inputList) {
+                for (Input w : list) {
                     String s = w.getValue() + " " + w.getWordCount();
                     joiner.add(s);
                 }
@@ -45,16 +36,20 @@ public class WordFrequencyGame {
         }
     }
 
-    private Map<String, List<Input>> getListMap(List<Input> inputList) {
-        Map<String, List<Input>> map = new HashMap<>();
-        for (Input input : inputList) {
-//       map.computeIfAbsent(input.getValue(), k -> new ArrayList<>()).add(input);
-            if (!map.containsKey(input.getValue())) {
+    private List<String> getWords(String input){
+        String[] arr = input.split("\\s+");
+        return Arrays.asList(arr);
+    }
+
+    private Map<String, List<String>> getListMap(List<String> inputList) {
+        Map<String, List<String>> map = new HashMap<>();
+        for (String input : inputList) {
+            if (!map.containsKey(input)) {
                 ArrayList arr = new ArrayList<>();
                 arr.add(input);
-                map.put(input.getValue(), arr);
+                map.put(input, arr);
             } else {
-                map.get(input.getValue()).add(input);
+                map.get(input).add(input);
             }
         }
         return map;
