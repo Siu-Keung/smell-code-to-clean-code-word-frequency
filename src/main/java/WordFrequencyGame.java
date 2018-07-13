@@ -7,25 +7,17 @@ import java.util.stream.Collectors;
 public class WordFrequencyGame {
     public String getResult(String inputStr) {
 
-        if (inputStr.split("\\s+").length == 1) {
-            return inputStr + " 1";
-        } else {
+        List<String> inputList = getWords(inputStr);
 
-            try {
-                List<String> inputList = getWords(inputStr);
+        List<Input> list = countFrequency(inputList);
 
-                List<Input> list = countFrequency(inputList);
-
-                StringJoiner joiner = new StringJoiner("\n");
-                for (Input w : list) {
-                    String s = w.getValue() + " " + w.getWordCount();
-                    joiner.add(s);
-                }
-                return joiner.toString();
-            } catch (Exception e) {
-                return "Calculate Error";
-            }
+        StringJoiner joiner = new StringJoiner("\n");
+        for (Input w : list) {
+            String s = w.getValue() + " " + w.getWordCount();
+            joiner.add(s);
         }
+        return joiner.toString();
+
     }
 
     private List<String> getWords(String input){
