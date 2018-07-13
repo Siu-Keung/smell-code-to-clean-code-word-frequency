@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by jxzhong on 2018/5/22.
@@ -13,16 +14,7 @@ public class WordFrequencyGame {
             try {
                 List<String> inputList = getWords(inputStr);
 
-                //get the map for the next step of sizing the same word
-                Map<String, List<String>> map = getListMap(inputList);
-
-                List<Input> list = new ArrayList<>();
-                for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-                    Input input = new Input(entry.getKey(), entry.getValue().size());
-                    list.add(input);
-                }
-
-                list.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
+                List<Input> list = countFrequency(inputList);
 
                 StringJoiner joiner = new StringJoiner("\n");
                 for (Input w : list) {
@@ -41,17 +33,16 @@ public class WordFrequencyGame {
         return Arrays.asList(arr);
     }
 
-    private Map<String, List<String>> getListMap(List<String> inputList) {
-        Map<String, List<String>> map = new HashMap<>();
-        for (String input : inputList) {
-            if (!map.containsKey(input)) {
-                ArrayList arr = new ArrayList<>();
-                arr.add(input);
-                map.put(input, arr);
-            } else {
-                map.get(input).add(input);
-            }
+    private List<Input> countFrequency(List<String> inputList){
+        Map<String, Long> resultMap = inputList.stream().sorted()
+                .collect(Collectors.groupingBy(String :: toString, Collectors.counting()));
+        Set<Map.Entry<String, Long>> entries = resultMap.entrySet();
+        List<Input> resultList = new ArrayList<>();
+        for (Map.Entry<String, Long> entry : entries) {
+            resultList.add(new Input(entry.getKey(), entry.getValue().intValue()));
         }
-        return map;
+        resultList = resultList.stream().sorted((x, y) -> y.getWordCount() - x.getWordCount()).collect(Collectors.toList());
+        return resultList;
     }
+
 }
